@@ -1,9 +1,16 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"log"
+	"refresh_token/internal/app"
+)
 
 func main() {
-	r := gin.Default()
+	db := SetupDatabase()
 
-	r.Run(":8080")
+	a := app.New(db)
+	err := a.Start()
+	if err != nil {
+		log.Fatal("error starting app: ", err)
+	}
 }
