@@ -2,9 +2,8 @@ package main
 
 import (
 	"log"
-
 	"refresh_token/config"
-	"refresh_token/internal/app"
+	"refresh_token/internal/database"
 )
 
 func main() {
@@ -17,9 +16,7 @@ func main() {
 		log.Fatal("error setting up database: ", err)
 	}
 
-	a := app.New(db)
-	err = a.Start()
-	if err != nil {
-		log.Fatal("error starting app: ", err)
+	if err := database.Migrate(db); err != nil {
+		log.Fatal("error migrating database: ", err)
 	}
 }
