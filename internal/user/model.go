@@ -36,7 +36,7 @@ func (u *User) VerifyPassword(password string) error {
 	return hash.VerifyPassword(password, u.Password)
 }
 
-func (u *User) Public() dto.UserResponse {
+func (u *User) ToResponse() dto.UserResponse {
 	return dto.UserResponse{
 		ID:    u.ID,
 		Name:  u.Name,

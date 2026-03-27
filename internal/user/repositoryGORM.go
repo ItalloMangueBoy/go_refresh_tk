@@ -25,14 +25,42 @@ func (repo RepositoryGORM) Delete(user *User) error {
 	return repo.db.Delete(user).Error
 }
 
-func (repo RepositoryGORM) FindByID(user *User, id uuid.UUID) error {
-	return repo.db.First(user, id).Error
+func (repo RepositoryGORM) GetByID(id uuid.UUID) (*User, error) {
+	var user User
+	err := repo.db.First(&user, id).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
 }
 
-func (repo RepositoryGORM) FindByEmail(user *User, email string) error {
-	return repo.db.Where("email = ?", email).First(user).Error
+func (repo RepositoryGORM) GetByEmail(email string) (*User, error) {
+	var user User
+	err := repo.db.Where("email = ?", email).First(&user).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
 }
 
-func (repo RepositoryGORM) List(users *[]User) error {
-	return repo.db.Find(users).Error
+func (repo RepositoryGORM) ExistsByEmail(email string) (bool, error) {
+	var count int64
+	err := repo.db.Model(&User{}).Where("email = ?", email).Count(&count).Error
+	if err != nil {
+		return false, err
+	}
+
+	return count > 0, nil
+}
+
+func (repo RepositoryGORM) List() ([]User, error) {
+	var users []User
+	err := repo.db.Find(&users).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return users, nil
 }

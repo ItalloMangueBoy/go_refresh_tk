@@ -6,7 +6,8 @@ type Repository interface {
 	Create(user *User) error
 	Update(user *User) error
 	Delete(user *User) error
-	FindByID(user *User, id uuid.UUID) error
-	FindByEmail(user *User, email string) error
-	List(users *[]User) error
+	GetByID(id uuid.UUID) (user *User, err error)
+	GetByEmail(email string) (user *User, err error)
+	ExistsByEmail(email string) (bool, error)
+	List() (users []User, err error)
 }
