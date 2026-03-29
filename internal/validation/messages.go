@@ -8,6 +8,8 @@ func message(fe validator.FieldError) string {
 		return "Required field"
 	case "email":
 		return "Invalid email address"
+	case "eqfield":
+		return "Passwords do not match"
 	default:
 		return "Invalid field"
 	}

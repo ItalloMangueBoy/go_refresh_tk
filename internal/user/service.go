@@ -17,11 +17,10 @@ func (s *Service) Create(input *CreateDTO) (*ResponseDTO, error) {
 		return nil, ErrUserAlreadyExists
 	}
 
-	user := &User{
-		Name:  input.Name,
-		Email: input.Email,
+	user, err := input.ToModel()
+	if err != nil {
+		return nil, err
 	}
-	user.SetPassword(input.Password)
 
 	if err := s.repo.Create(user); err != nil {
 		return nil, err
