@@ -1,7 +1,5 @@
 package user
 
-import "refresh_token/internal/user/dto"
-
 type Service struct {
 	repo Repository
 }
@@ -10,7 +8,7 @@ func NewService(repo Repository) *Service {
 	return &Service{repo: repo}
 }
 
-func (s *Service) Create(input *dto.CreateInput) (*dto.UserResponse, error) {
+func (s *Service) Create(input *CreateDTO) (*ResponseDTO, error) {
 	exists, err := s.repo.ExistsByEmail(input.Email)
 	if err != nil {
 		return nil, err

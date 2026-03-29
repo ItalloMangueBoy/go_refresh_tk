@@ -2,7 +2,6 @@ package user
 
 import (
 	"errors"
-	"refresh_token/internal/user/dto"
 	"refresh_token/internal/validation"
 	"refresh_token/pkg/response"
 
@@ -18,7 +17,7 @@ func NewHandler(service *Service) *Handler {
 }
 
 func (h *Handler) Create(c *gin.Context) {
-	var input dto.CreateInput
+	var input CreateDTO
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		parsedError := validation.ParseErrors(err)

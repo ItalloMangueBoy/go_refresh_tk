@@ -1,7 +1,6 @@
 package user
 
 import (
-	"refresh_token/internal/user/dto"
 	"refresh_token/pkg/hash"
 
 	"github.com/google/uuid"
@@ -36,8 +35,8 @@ func (u *User) VerifyPassword(password string) error {
 	return hash.VerifyPassword(password, u.Password)
 }
 
-func (u *User) ToResponse() dto.UserResponse {
-	return dto.UserResponse{
+func (u *User) ToResponse() ResponseDTO {
+	return ResponseDTO{
 		ID:    u.ID,
 		Name:  u.Name,
 		Email: u.Email,
