@@ -6,6 +6,7 @@ import (
 	"refresh_token/pkg/response"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type Handler struct {
@@ -36,4 +37,24 @@ func (h *Handler) Create(c *gin.Context) {
 	}
 
 	response.RespondCreated(c, user)
+}
+
+func (h *Handler) GetByID(c *gin.Context) {
+	id, err := uuid.Parse(c.Param("id"))
+	if err != nil {
+		response.RespondBadRequest(c, err)
+		return
+	}
+
+	user, err := h.service.GetByID(id)
+	if err != nil {
+		if errors.Is(err, ErrUserNotFound) {
+			response.RespondNotFound(c, err)
+			return
+		}
+		response.RespondInternalError(c, err)
+		return
+	}
+
+	response.RespondSuccess(c, user)
 }

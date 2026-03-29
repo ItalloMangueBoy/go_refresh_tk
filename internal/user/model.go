@@ -12,7 +12,7 @@ type User struct {
 	ID       uuid.UUID `gorm:"type:uuid;primaryKey"`
 	Name     string    `gorm:"not null"`
 	Email    string    `gorm:"not null;uniqueIndex:idx_email"`
-	Password string    `gorm:"not null"`
+	Password string    `gorm:"not null" json:"-"`
 }
 
 func (u *User) BeforeCreate(tx *gorm.DB) (err error) {

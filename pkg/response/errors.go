@@ -34,3 +34,19 @@ func RespondConflict(c *gin.Context, err error) {
 		Details: err.Error(),
 	})
 }
+
+func RespondBadRequest(c *gin.Context, err error) {
+	RespondError(c, &APIError{
+		Code:    http.StatusBadRequest,
+		Message: "Bad request",
+		Details: err.Error(),
+	})
+}
+
+func RespondNotFound(c *gin.Context, err error) {
+	RespondError(c, &APIError{
+		Code:    http.StatusNotFound,
+		Message: "Not found",
+		Details: err.Error(),
+	})
+}

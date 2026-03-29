@@ -1,6 +1,10 @@
 package response
 
-import "github.com/gin-gonic/gin"
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
 
 type APIResponse struct {
 	Success bool        `json:"success"`
@@ -9,14 +13,14 @@ type APIResponse struct {
 }
 
 func RespondSuccess(c *gin.Context, data interface{}) {
-	c.JSON(200, APIResponse{
+	c.JSON(http.StatusOK, APIResponse{
 		Success: true,
 		Data:    data,
 	})
 }
 
 func RespondCreated(c *gin.Context, data interface{}) {
-	c.JSON(201, APIResponse{
+	c.JSON(http.StatusCreated, APIResponse{
 		Success: true,
 		Data:    data,
 	})

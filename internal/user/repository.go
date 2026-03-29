@@ -8,6 +8,5 @@ type Repository interface {
 	Delete(user *User) error
 	GetByID(id uuid.UUID) (user *User, err error)
 	GetByEmail(email string) (user *User, err error)
-	ExistsByEmail(email string) (bool, error)
 	List() (users []User, err error)
 }

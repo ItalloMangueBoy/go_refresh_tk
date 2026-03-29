@@ -1,6 +1,8 @@
 package user
 
 import (
+	"errors"
+
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
@@ -14,7 +16,16 @@ func NewGormRepository(db *gorm.DB) Repository {
 }
 
 func (repo RepositoryGORM) Create(user *User) error {
-	return repo.db.Create(user).Error
+	err := repo.db.Create(user).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrDuplicatedKey) {
+			return ErrUserAlreadyExists
+		}
+
+		return err
+	}
+
+	return nil
 }
 
 func (repo RepositoryGORM) Update(user *User) error {
@@ -29,6 +40,9 @@ func (repo RepositoryGORM) GetByID(id uuid.UUID) (*User, error) {
 	var user User
 	err := repo.db.First(&user, id).Error
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, ErrUserNotFound
+		}
 		return nil, err
 	}
 
@@ -43,16 +57,6 @@ func (repo RepositoryGORM) GetByEmail(email string) (*User, error) {
 	}
 
 	return &user, nil
-}
-
-func (repo RepositoryGORM) ExistsByEmail(email string) (bool, error) {
-	var count int64
-	err := repo.db.Model(&User{}).Where("email = ?", email).Count(&count).Error
-	if err != nil {
-		return false, err
-	}
-
-	return count > 0, nil
 }
 
 func (repo RepositoryGORM) List() ([]User, error) {
