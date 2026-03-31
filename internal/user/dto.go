@@ -27,3 +27,7 @@ func (dto CreateDTO) ToModel() (*User, error) {
 
 	return user, nil
 }
+
+type GetByEmailDTO struct {
+	Email string `form:"email" binding:"required,email"`
+}

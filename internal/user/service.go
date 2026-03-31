@@ -35,3 +35,13 @@ func (s *Service) GetByID(id uuid.UUID) (*ResponseDTO, error) {
 	resp := user.ToResponse()
 	return &resp, nil
 }
+
+func (s *Service) GetByEmail(input *GetByEmailDTO) (*ResponseDTO, error) {
+	user, err := s.repo.GetByEmail(input.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	resp := user.ToResponse()
+	return &resp, nil
+}

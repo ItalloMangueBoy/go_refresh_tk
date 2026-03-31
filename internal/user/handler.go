@@ -58,3 +58,24 @@ func (h *Handler) GetByID(c *gin.Context) {
 
 	response.RespondSuccess(c, user)
 }
+
+func (h *Handler) GetByEmail(c *gin.Context) {
+	var input GetByEmailDTO
+	if err := c.ShouldBindQuery(&input); err != nil {
+		parsedError := validation.ParseErrors(err)
+		response.RespondError(c, parsedError)
+		return
+	}
+
+	user, err := h.service.GetByEmail(&input)
+	if err != nil {
+		if errors.Is(err, ErrUserNotFound) {
+			response.RespondNotFound(c, err)
+			return
+		}
+		response.RespondInternalError(c, err)
+		return
+	}
+
+	response.RespondSuccess(c, user)
+}

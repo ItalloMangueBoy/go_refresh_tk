@@ -1,12 +1,13 @@
 @base = http://localhost:8081/api
 @id = a24a5213-ee44-439c-904f-7ea579be029e
+@email = itallo@email.com
 
 POST {{base}}/users
 Content-Type: application/json
 
 {
     "name": "itallo",
-    "email": "itallo@email.com",
+    "email": {{email}},
     "password": "123456",
     "confirm_password": "123456"
 }
@@ -14,3 +15,7 @@ Content-Type: application/json
 ###
 
 GET {{base}}/users/{{id}}
+
+###
+
+GET {{base}}/users/email/{{email}}
