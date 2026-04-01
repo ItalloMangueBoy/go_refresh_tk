@@ -62,9 +62,9 @@ func (repo RepositoryGORM) GetByEmail(email string) (*User, error) {
 	return &user, nil
 }
 
-func (repo RepositoryGORM) List() ([]User, error) {
+func (repo RepositoryGORM) GetSearch(search string) ([]User, error) {
 	var users []User
-	err := repo.db.Find(&users).Error
+	err := repo.db.Where("name LIKE ?", "%"+search+"%").Find(&users).Error
 	if err != nil {
 		return nil, err
 	}

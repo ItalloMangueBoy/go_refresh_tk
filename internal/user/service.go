@@ -45,3 +45,17 @@ func (s *Service) GetByEmail(input *GetByEmailDTO) (*ResponseDTO, error) {
 	resp := user.ToResponse()
 	return &resp, nil
 }
+
+func (s *Service) GetSearch(input *GetSearchDTO) ([]ResponseDTO, error) {
+	users, err := s.repo.GetSearch(input.Search)
+	if err != nil {
+		return nil, err
+	}
+
+	resp := make([]ResponseDTO, len(users))
+	for i, user := range users {
+		resp[i] = user.ToResponse()
+	}
+
+	return resp, nil
+}

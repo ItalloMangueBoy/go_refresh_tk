@@ -79,3 +79,20 @@ func (h *Handler) GetByEmail(c *gin.Context) {
 
 	response.RespondSuccess(c, user)
 }
+
+func (h *Handler) GetSearch(c *gin.Context) {
+	var input GetSearchDTO
+	if err := c.ShouldBindQuery(&input); err != nil {
+		parsedError := validation.ParseErrors(err)
+		response.RespondError(c, parsedError)
+		return
+	}
+
+	users, err := h.service.GetSearch(&input)
+	if err != nil {
+		response.RespondInternalError(c, err)
+		return
+	}
+
+	response.RespondSuccess(c, users)
+}

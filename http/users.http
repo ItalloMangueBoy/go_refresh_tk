@@ -6,8 +6,8 @@ POST {{base}}/users
 Content-Type: application/json
 
 {
-    "name": "itallo",
-    "email": {{email}},
+    "name": "icaro",
+    "email":  "icaro@email.com",
     "password": "123456",
     "confirm_password": "123456"
 }
@@ -19,3 +19,7 @@ GET {{base}}/users/{{id}}
 ###
 
 GET {{base}}/users/email/{{email}}
+
+###
+
+GET {{base}}/users?search=

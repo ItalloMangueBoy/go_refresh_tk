@@ -31,3 +31,7 @@ func (dto CreateDTO) ToModel() (*User, error) {
 type GetByEmailDTO struct {
 	Email string `form:"email" binding:"required,email"`
 }
+
+type GetSearchDTO struct {
+	Search string `form:"search"`
+}
