@@ -1,7 +1,7 @@
 package user
 
 import (
-	"refresh_token/pkg/hash"
+	"refresh_token/pkg/encrypt"
 
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -22,7 +22,7 @@ func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
 }
 
 func (u *User) SetPassword(password string) error {
-	hashedPassword, err := hash.HashPassword(password)
+	hashedPassword, err := encrypt.Hash(password)
 	if err != nil {
 		return err
 	}
@@ -32,7 +32,7 @@ func (u *User) SetPassword(password string) error {
 }
 
 func (u *User) VerifyPassword(password string) error {
-	return hash.VerifyPassword(password, u.Password)
+	return encrypt.Verify(password, u.Password)
 }
 
 func (u *User) ToResponse() ResponseDTO {
