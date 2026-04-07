@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"refresh_token/internal/user"
 	"refresh_token/pkg/encrypt"
 	"time"
 
@@ -9,12 +10,15 @@ import (
 )
 
 type RefreshToken struct {
-	gorm.Model
-	ID        uuid.UUID `gorm:"type:uuid;primaryKey"`
-	UserID    uuid.UUID `gorm:"type:uuid;not null;index"`
-	Token     string    `gorm:"not null;uniqueIndex:idx_token" json:"-"`
-	Revoked   bool      `gorm:"not null;default:false"`
-	ExpiresAt time.Time `gorm:"not null"`
+	ID        uuid.UUID      `gorm:"type:uuid;primaryKey"`
+	UserID    uuid.UUID      `gorm:"type:uuid;not null;index"`
+	User      user.User      `gorm:"foreignKey:UserID;references:ID;constraint:OnDelete:CASCADE"`
+	Token     string         `gorm:"not null;uniqueIndex:idx_token" json:"-"`
+	Revoked   bool           `gorm:"not null;default:false"`
+	ExpiresAt time.Time      `gorm:"not null;index"`
+	CreatedAt time.Time      `json:"created_at"`
+	UpdatedAt time.Time      `json:"updated_at"`
+	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`
 }
 
 func (rt *RefreshToken) BeforeCreate(tx *gorm.DB) (err error) {
@@ -33,11 +37,9 @@ func (rt *RefreshToken) SetToken(token string) error {
 	return nil
 }
 
-
 func (rt *RefreshToken) VerifyToken(token string) error {
 	return encrypt.Verify(token, rt.Token)
 }
-
 
 func (rt *RefreshToken) Revoke() {
 	rt.Revoked = true
@@ -66,6 +68,7 @@ func (rt *RefreshToken) IsValid() bool {
 func (rt *RefreshToken) ToResponse() ResponseDTO {
 	return ResponseDTO{
 		ID:        rt.ID,
+		UserID:    rt.UserID,
 		Revoked:   rt.Revoked,
 		ExpiresAt: rt.ExpiresAt,
 		CreatedAt: rt.CreatedAt,
