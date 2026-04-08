@@ -1,16 +1,16 @@
 package auth
 
-// import (
-// 	"github.com/gin-gonic/gin"
-// 	"gorm.io/gorm"
-// )
+import (
+	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
+)
 
-// func Register(rg *gin.RouterGroup, db *gorm.DB) {
-// 	repo := NewGormRepository(db)
-// 	service := NewService(repo)
-// 	handler := NewHandler(service)
+func Register(rg *gin.RouterGroup, db *gorm.DB) {
+	repo := NewGormRepository(db)
+	service := NewService(repo)
+	handler := NewHandler(service)
 
-// 	authRouter := rg.Group("/auth")
+	authRouter := rg.Group("/auth")
 
-// 	RegisterRoutes(authRouter, handler)
-// }
+	RegisterRoutes(authRouter, handler)
+}
