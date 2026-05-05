@@ -10,15 +10,15 @@ import (
 )
 
 type RefreshToken struct {
-	ID        uuid.UUID      `gorm:"type:uuid;primaryKey"`
-	UserID    uuid.UUID      `gorm:"type:uuid;not null;index"`
-	User      user.User      `gorm:"foreignKey:UserID;references:ID;constraint:OnDelete:CASCADE"`
-	Token     string         `gorm:"not null;uniqueIndex:idx_token" json:"-"`
-	Revoked   bool           `gorm:"not null;default:false"`
-	ExpiresAt time.Time      `gorm:"not null;index"`
-	CreatedAt time.Time      `json:"created_at"`
-	UpdatedAt time.Time      `json:"updated_at"`
-	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`
+	ID         uuid.UUID      `gorm:"type:uuid;primaryKey"`
+	UserID     uuid.UUID      `gorm:"type:uuid;not null;index"`
+	User       user.User      `gorm:"foreignKey:UserID;references:ID;constraint:OnDelete:CASCADE"`
+	SecretHash string         `gorm:"not null;uniqueIndex:idx_secret_hash" json:"-"`
+	Revoked    bool           `gorm:"not null;default:false"`
+	ExpiresAt  time.Time      `gorm:"not null;index"`
+	CreatedAt  time.Time      `json:"created_at"`
+	UpdatedAt  time.Time      `json:"updated_at"`
+	DeletedAt  gorm.DeletedAt `gorm:"index" json:"-"`
 }
 
 func (rt *RefreshToken) BeforeCreate(tx *gorm.DB) (err error) {
@@ -28,17 +28,17 @@ func (rt *RefreshToken) BeforeCreate(tx *gorm.DB) (err error) {
 	return nil
 }
 
-func (rt *RefreshToken) SetToken(token string) error {
-	hashedToken, err := encrypt.Hash(token)
+func (rt *RefreshToken) SetSecret(secret string) error {
+	hashedSecret, err := encrypt.Hash(secret)
 	if err != nil {
 		return err
 	}
-	rt.Token = hashedToken
+	rt.SecretHash = hashedSecret
 	return nil
 }
 
-func (rt *RefreshToken) VerifyToken(token string) error {
-	return encrypt.Verify(token, rt.Token)
+func (rt *RefreshToken) VerifySecret(secret string) error {
+	return encrypt.Verify(secret, rt.SecretHash)
 }
 
 func (rt *RefreshToken) Revoke() {
