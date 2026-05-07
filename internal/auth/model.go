@@ -65,8 +65,8 @@ func (rt *RefreshToken) IsValid() bool {
 	return !rt.IsExpired() && !rt.IsRevoked()
 }
 
-func (rt *RefreshToken) ToResponse() ResponseDTO {
-	return ResponseDTO{
+func (rt *RefreshToken) ToResponse() RefreshTokenResponseDTO {
+	return RefreshTokenResponseDTO{
 		ID:        rt.ID,
 		UserID:    rt.UserID,
 		Revoked:   rt.Revoked,

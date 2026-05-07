@@ -50,3 +50,11 @@ func RespondNotFound(c *gin.Context, err error) {
 		Details: err.Error(),
 	})
 }
+
+func RespondUnauthorized(c *gin.Context, err error) {
+	RespondError(c, &APIError{
+		Code:    http.StatusUnauthorized,
+		Message: "Unauthorized",
+		Details: err.Error(),
+	})
+}

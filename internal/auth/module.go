@@ -1,8 +1,8 @@
 package auth
 
 import (
-	"time"
-
+	"refresh_token/config"
+	"refresh_token/internal/user"
 	"refresh_token/pkg/token"
 
 	"github.com/gin-gonic/gin"
@@ -11,12 +11,12 @@ import (
 
 func Register(rg *gin.RouterGroup, db *gorm.DB) {
 	repo := NewGormRepository(db)
+	userRepo := user.NewGormRepository(db)
 
-	// Em produção, estas chaves/configs virão do os.Getenv() ou viper
-	accessMgr := token.NewAccessTokenManager("secretapikey", 15*time.Minute)
-	refreshMgr := token.NewRefreshTokenManager(32)
+	accessMgr := token.NewAccessTokenManager(config.AccessTokenSecret, config.AccessTokenTTL)
+	refreshMgr := token.NewRefreshTokenManager(config.RefreshTokenLength)
 
-	service := NewService(repo, accessMgr, refreshMgr)
+	service := NewService(repo, userRepo, accessMgr, refreshMgr)
 	handler := NewHandler(service)
 
 	authRouter := rg.Group("/auth")
